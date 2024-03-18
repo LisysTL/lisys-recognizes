@@ -1,9 +1,9 @@
-
 import streamlit as st
 import cv2
 import numpy as np
 from PIL import Image
 import image_enhance as ie
+
 
 # from util import set_background
 
@@ -36,6 +36,7 @@ def brightness(uploaded_image):
     except Exception as e:
         st.error("Error enhancing image: {}".format(str(e)))
 
+
 def contrast(uploaded_image):
     try:
         # Convert uploaded image to OpenCV format
@@ -65,6 +66,7 @@ def gamma(uploaded_image):
     except Exception as e:
         st.error("Error enhancing image: {}".format(str(e)))
 
+
 def edge(uploaded_image):
     try:
         # Convert uploaded image to OpenCV format
@@ -78,7 +80,6 @@ def edge(uploaded_image):
         st.image(enhanced_image, caption='Edges Detected', use_column_width=True)
     except Exception as e:
         st.error("Error enhancing image: {}".format(str(e)))
-
 
 
 def motion(uploaded_image):
@@ -95,11 +96,11 @@ def motion(uploaded_image):
     except Exception as e:
         st.error("Error enhancing image: {}".format(str(e)))
 
+
 def skin(uploaded_image):
     try:
         # Convert uploaded image to OpenCV format
         img = Image.open(uploaded_image)
-        # img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
 
         # Enhance the image
         enhanced_image = ie.skin_detection(img)
@@ -124,6 +125,7 @@ def custom(uploaded_image):
     except Exception as e:
         st.error("Error enhancing image: {}".format(str(e)))
 
+
 def resize(uploaded_image):
     try:
         # Convert uploaded image to OpenCV format
@@ -138,6 +140,7 @@ def resize(uploaded_image):
     except Exception as e:
         st.error("Error enhancing image: {}".format(str(e)))
 
+
 def main():
     st.title("Image Enhancement")
 
@@ -145,14 +148,16 @@ def main():
     uploaded_image = st.file_uploader("Upload Image", type=['jpg', 'jpeg'])
 
     if uploaded_image is not None:
-        operation = st.selectbox('Choose an operation',['Original','Auto Enhancer','Bright', 'Contrast', 'Gamma Correction', 'Sharpness','Skin Detector', 'Edge Detector','Resize'])
+        operation = st.selectbox('Choose an operation',
+                                 ['Original', 'Auto Enhancer', 'Bright', 'Contrast', 'Gamma Correction', 'Sharpness',
+                                  'Skin Detector', 'Edge Detector', 'Resize'])
 
         if operation == 'Bright':
             brightness(uploaded_image)
 
         elif operation == 'Contrast':
             contrast(uploaded_image)
-        
+
         elif operation == 'Auto Enhancer':
             custom(uploaded_image)
 
