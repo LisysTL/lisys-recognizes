@@ -8,7 +8,7 @@ def original(image):
     return image
 
 
-def brightness(image):
+def brightness(image): # use when Image Too Dark
     enhanced_image = cv2.equalizeHist(image)
     print('Image enhanced')
     return enhanced_image
