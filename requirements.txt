@@ -1,0 +1,6 @@
+
+face-recognition 
+numpy
+pandas
+streamlit
+matplotlib
