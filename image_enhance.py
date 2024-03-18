@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 from skimage import exposure
 
+
 def original(image):
     return image
 
@@ -13,12 +14,13 @@ def brightness(image):
     return enhanced_image
 
 
-def contrast(image): # Use when Image Too Bright
+def contrast(image):  # Use when Image Too Bright
     p2, p98 = np.percentile(image, (2, 98))
     image_contrast_stretched = exposure.rescale_intensity(image, in_range=(p2, p98))
     return image_contrast_stretched
 
-def gamma_correction(image, threshold=127): # Automatically brightens or darkens the image
+
+def gamma_correction(image, threshold=127):  # Automatically brightens or darkens the image
     avg_intensity = cv2.mean(image)[0]
 
     if avg_intensity > threshold:
@@ -28,10 +30,11 @@ def gamma_correction(image, threshold=127): # Automatically brightens or darkens
     image_gamma_corrected = exposure.adjust_gamma(image, gamma)
     return image_gamma_corrected
 
-def reduce_motion_blur(image, kernel_size=(3, 3), blur_strength=5): # Reduces Motion Blur, Increases Sharpness
+
+def reduce_motion_blur(image, kernel_size=(3, 3), blur_strength=5):  # Reduces Motion Blur, Increases Sharpness
     # Create motion blur kernel
     kernel = np.zeros(kernel_size)
-    kernel[int((kernel_size[0]-1)/2), :] = np.ones(kernel_size[0])
+    kernel[int((kernel_size[0] - 1) / 2), :] = np.ones(kernel_size[0])
     kernel /= kernel_size[0]
 
     # Apply Wiener deconvolution
@@ -44,12 +47,13 @@ def reduce_motion_blur(image, kernel_size=(3, 3), blur_strength=5): # Reduces Mo
 
     return deconvolved
 
-def edge_detector(image): # Canny Edge Detector
+
+def edge_detector(image):  # Canny Edge Detector
     edges = cv2.Canny(image, threshold1=100, threshold2=200)
     return edges
 
 
-def skin_detection(image): # Segments Skin from Images
+def skin_detection(image):  # Segments Skin from Images
     # Convert image to YCrCb color space
     ycrcb = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2YCrCb)
     # Define lower and upper bounds for skin color in YCrCb color space
@@ -68,15 +72,16 @@ def skin_detection(image): # Segments Skin from Images
     result = cv2.bitwise_and(image, image, mask=mask)
     return result
 
-def image_resizer(image): # Resizes Image before enhancement
+
+def image_resizer(image):  # Resizes Image before enhancement
     width = 1600
     height = 900
 
-    image = cv2.resize(image,(width,height))
+    image = cv2.resize(image, (width, height))
     return image
 
 
-def Image_Enchancer(image, threshold=127): # Auto Enchancer
+def Image_Enchancer(image, threshold=127):  # Auto Enchancer
 
     # Calculate the average pixel intensity
     avg_intensity = cv2.mean(image)[0]
@@ -91,4 +96,3 @@ def Image_Enchancer(image, threshold=127): # Auto Enchancer
     # Increasing Sharpness
     Enchanced_Image = reduce_motion_blur(image)
     return Enchanced_Image
-
