@@ -6,8 +6,9 @@ import numpy as np
 from PIL import Image
 from util import set_background
 import dlib
-
 # from mtcnn.mtcnn import MTCNN
+
+
 
 # Face recognition - face locations
 
@@ -17,6 +18,8 @@ def detect_faces(image):
 
     # Return the face locations
     return face_locations
+
+
 
 
 # YOLO V3
@@ -32,7 +35,6 @@ COLOR_RED = (0, 0, 255)
 COLOR_WHITE = (255, 255, 255)
 COLOR_YELLOW = (0, 255, 255)
 
-
 def get_outputs_names(net):
     # Get the names of all the layers in the network
     layers_names = net.getLayerNames()
@@ -45,7 +47,6 @@ def get_outputs_names(net):
 def draw_predict(frame, conf, left, top, right, bottom):
     # Draw a bounding box.
     cv2.rectangle(frame, (left, top), (right, bottom), COLOR_YELLOW, 2)
-
 
 def post_process(frame, outs, conf_threshold, nms_threshold):
     frame_height = frame.shape[0]
@@ -89,7 +90,7 @@ def post_process(frame, outs, conf_threshold, nms_threshold):
         face_locs.append([left,top,right,bottom])
         # draw_predict(frame, confidences[i], left, top, left + width,
         #              top + height)
-        draw_predict(frame, confidences[i], left, top, right, bottom)
+        # draw_predict(frame, confidences[i], left, top, right, bottom)
     return final_boxes , face_locs
 
 def refined_box(left, top, width, height):
@@ -124,6 +125,10 @@ def detect_faces_yolov3(image):
 
     return face_locs
 
+
+
+# DLIB
+
 def detect_faces_dlib(image):
 
     face_detector = dlib.get_frontal_face_detector()
@@ -133,8 +138,6 @@ def detect_faces_dlib(image):
 
     # Return the face locations
     return face_locations
-
-
 
 
 def detect_faces_in_image(uploaded_image):
@@ -168,8 +171,8 @@ def detect_faces_in_image_2(uploaded_image):
         face_locations = detect_faces_yolov3(img_cv0)
 
         # Draw rectangles around detected faces
-        # for (top, right, bottom, left) in face_locations:
-            # cv2.rectangle(img_cv, (left, top), (right, bottom), COLOR_YELLOW, 2)
+        for (right, bottom, left,top) in face_locations:
+            cv2.rectangle(img_cv0, (left, top), (right, bottom), COLOR_YELLOW, 2)
         
         img_cv = cv2.cvtColor(np.array(img_cv0), cv2.COLOR_BGR2RGB)
 
@@ -199,6 +202,5 @@ def detect_faces_in_image_3(uploaded_image):
         st.image(img_cv, caption='Image with Detected Faces', use_column_width=True)
     except Exception as e:
         st.error("Error detecting faces: {}".format(str(e)))
-
 
 

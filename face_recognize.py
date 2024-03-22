@@ -22,14 +22,17 @@ def get_encodings(paths):
 
     return list_encodings, list_names
 
-def recognize_faces(image, list_encodings, list_names, tolerance=0.5):  # tolerance is confidence , change it for seing variations in results
+def recognize_faces(image, list_encodings, list_names, face_locations, tolerance=0.5):  # tolerance is confidence , change it for seing variations in results
     img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    face_locations = face_recognition.face_locations(img_rgb)
-    face_encodings = face_recognition.face_encodings(img_rgb, face_locations)
+    face_locs = []
+    for i in face_locations:
+        x , z , h, b = i
+        face_locs.append((z,h,b,x))
+    face_encodings = face_recognition.face_encodings(img_rgb, face_locs)
 
     recognized_faces = {}  # Dictionary to store recognized faces
 
-    for encoding, location in zip(face_encodings, face_locations):
+    for encoding, location in zip(face_encodings, face_locs):
         matches = face_recognition.compare_faces(list_encodings, encoding, tolerance=tolerance)
         name = 'Not identified'
         face_distances = face_recognition.face_distance(list_encodings, encoding)
