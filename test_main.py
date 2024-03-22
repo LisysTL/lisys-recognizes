@@ -7,8 +7,14 @@ import numpy as np
 import streamlit as st
 from PIL import Image
 from image_enhance import enhance_image
+from face_detect import detect_faces_yolov3
+from face_detect import get_outputs_names
+from face_detect import draw_predict
+from face_detect import post_process
+from face_detect import refined_box
 from face_detect import detect_faces
 from face_recognize import recognize_faces, get_encodings
+
 
 # from util import set_background
 
@@ -47,7 +53,7 @@ def main():
 
     # Get encodings and names from the image dataset
     list_encodings, list_names = get_encodings(image_paths)
-
+    print("upload image")
     # Upload an image to be recognized
     uploaded_image = st.file_uploader("Upload Image", type=['jpg', 'jpeg'])
 
@@ -67,13 +73,13 @@ def main():
         enhanced_image = enhance_image(img_cv)
 
         # Detect faces in the enhanced image
-        face_locations = detect_faces(enhanced_image)
-
+        face_locations = detect_faces_yolov3(enhanced_image)
+        
         # Recognize faces in the detected faces
-        recognized_faces = recognize_faces(enhanced_image, list_encodings, list_names)
+        recognized_faces = recognize_faces(enhanced_image, list_encodings, list_names, face_locations)
 
         # Display the recognized faces in a tabular format
         display_recognized_faces(recognized_faces, list_names)
-
+        print("E")
 if __name__ == "__main__":
     main()
