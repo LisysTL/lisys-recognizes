@@ -17,6 +17,10 @@ import numpy as np
 from skimage import exposure
 
 
+def original(image):
+    return image
+
+
 def gamma_correction(image, threshold=127):  # Automatically brightens or darkens the image
     avg_intensity = cv2.mean(image)[0]
 
@@ -47,7 +51,7 @@ def reduce_motion_blur(image, kernel_size=(2, 2), blur_strength=2):  # Reduces M
 
 def Image_Enhancer(image):  # Auto Enhancer
 
-    image = cv2.imread(image, cv2.IMREAD_GRAYSCALE)  # Reading and Grayscale Conversion
+    # image = cv2.imread(image, cv2.IMREAD_GRAYSCALE)  # Reading and Grayscale Conversion
     image = cv2.resize(image, (1550, 850))  # Resizing
 
     Enhanced_Image = gamma_correction(image)  # Brightness and Contrast

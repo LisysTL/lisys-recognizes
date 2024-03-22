@@ -4,3 +4,5 @@ numpy
 pandas
 streamlit
 matplotlib
+cv2
+scikit-image
