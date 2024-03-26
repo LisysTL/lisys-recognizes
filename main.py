@@ -1,7 +1,7 @@
 # main.py
 import os
 import cv2
-from image_enhance import enhance_image
+from image_enhance import Image_Enhancer
 from face_detect import detect_faces
 from face_detect import detect_faces_yolov3
 from face_detect import get_outputs_names
@@ -26,7 +26,7 @@ def main():
     test_image = cv2.imread(test_image_path)
 
     # Enhance the original image
-    enhanced_image = enhance_image(test_image)
+    enhanced_image = Image_Enhancer(test_image)
 
     # Detect faces in the enhanced image
     face_locations = detect_faces_yolov3(enhanced_image)

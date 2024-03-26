@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 from PIL import Image
-from image_enhance import enhance_image
+from image_enhance import Image_Enhancer
 from face_detect import detect_faces_yolov3
 from face_detect import get_outputs_names
 from face_detect import draw_predict
@@ -61,7 +61,7 @@ def main():
         try:
             # Convert uploaded image to OpenCV format
             img = Image.open(uploaded_image)
-            img_cv = np.array(img)
+            img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2GRAY)
         except Exception as e:
             st.error("Error converting image: {}".format(str(e)))
             return
@@ -70,7 +70,7 @@ def main():
         st.image(img, caption='Uploaded Image', use_column_width=True)
 
         # Enhance the original image
-        enhanced_image = enhance_image(img_cv)
+        enhanced_image = Image_Enhancer(img_cv)
 
         # Detect faces in the enhanced image
         face_locations = detect_faces_yolov3(enhanced_image)
