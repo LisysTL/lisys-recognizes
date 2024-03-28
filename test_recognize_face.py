@@ -5,12 +5,13 @@ import numpy as np
 import streamlit as st
 from PIL import Image
 from face_recognize import recognize_faces, get_encodings
+from face_detect import detect_faces_yolov3, get_outputs_names, draw_predict, post_process, refined_box
 
 # from util import set_background
 
 # set_background('pix/4.png')
 
-def recognize_faces_in_image(uploaded_image, list_encodings, list_names):
+def recognize_faces_in_image(uploaded_image, list_encodings, list_names,face_locations):
     try:
         # Convert uploaded image to OpenCV format
         img = Image.open(uploaded_image)
@@ -18,7 +19,7 @@ def recognize_faces_in_image(uploaded_image, list_encodings, list_names):
         img_cv = cv2.cvtColor(np.array(img_cv0), cv2.COLOR_BGR2RGB)
 
         # Recognize faces in the image
-        recognized_faces = recognize_faces(img_cv, list_encodings, list_names)
+        recognized_faces = recognize_faces(img_cv, list_encodings, list_names,face_locations)
 
         # Draw rectangles around recognized faces
         for name, (top, right, bottom, left) in recognized_faces.items():
@@ -44,7 +45,13 @@ def main():
     uploaded_image = st.file_uploader("Upload JPG Image", type=['jpg', 'jpeg'])
 
     if uploaded_image is not None:
-        recognize_faces_in_image(uploaded_image, list_encodings, list_names)
+
+        img = Image.open(uploaded_image)
+        img_cv = np.array(img)
+
+        face_locations = detect_faces_yolov3(img_cv)
+
+        recognize_faces_in_image(uploaded_image, list_encodings, list_names, face_locations)
 
 if __name__ == "__main__":
     main()
