@@ -21,6 +21,18 @@ def original(image):
     return image
 
 
+def resize_image(image, threshold=500, scaling_factor=1.5):
+
+    # Check if the image needs resizing
+    height, width = image.shape[:2]
+    if height < threshold or width < threshold:
+        # Resize the image
+        resized_image = cv2.resize(image, (0, 0), fx=scaling_factor, fy=scaling_factor, interpolation=cv2.INTER_AREA)
+        return resized_image
+    else:
+        return image
+
+
 def gamma_correction(image, threshold=127):  # Automatically brightens or darkens the image
     avg_intensity = cv2.mean(image)[0]
 
@@ -51,9 +63,7 @@ def reduce_motion_blur(image, kernel_size=(2, 2), blur_strength=2):  # Reduces M
 
 def Image_Enhancer(image):  # Auto Enhancer
 
-    # image = cv2.imread(image, cv2.IMREAD_GRAYSCALE)  # Reading and Grayscale Conversion
-    image = cv2.resize(image, (1550, 850))  # Resizing
-
-    Enhanced_Image = gamma_correction(image)  # Brightness and Contrast
+    Enhanced_Image = resize_image(image)
+    Enhanced_Image = gamma_correction(Enhanced_Image)  # Brightness and Contrast
     Enhanced_Image = reduce_motion_blur(Enhanced_Image)  # Blur and Sharpen
     return Enhanced_Image
